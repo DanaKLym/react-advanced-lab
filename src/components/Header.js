@@ -44,6 +44,37 @@ const Header = () => {
     }
   };
 
+  //Header scroll hiding/appearing animation
+  const headerRef = useRef(null);
+
+  
+  useEffect(() => {
+      let previousScrollPosition = window.scrollY;
+
+      const handleScroll = () => {
+
+        const currentScrollPosition = window.scrollY;
+        const currentHeaderEl = headerRef.current;
+  
+        if (!currentHeaderEl) {
+          return;
+        }
+
+        if(previousScrollPosition > currentScrollPosition) {
+          currentHeaderEl.style.transform = "translateY(0)";
+        } else {
+          currentHeaderEl.style.transform = "translateY(-200px)";
+        }
+
+        previousScrollPosition = currentScrollPosition;
+      }
+        //setting up listeners for scroll event
+        window.addEventListener("scroll", handleScroll);
+
+        //removing listeners
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
   return (
     <Box
       position="fixed"
@@ -55,6 +86,7 @@ const Header = () => {
       transitionDuration=".3s"
       transitionTimingFunction="ease-in-out"
       backgroundColor="#18181b"
+      ref={headerRef}
     >
       <Box color="white" maxWidth="1280px" margin="0 auto">
         <HStack
